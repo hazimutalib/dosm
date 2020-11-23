@@ -17,18 +17,20 @@ def single_graph_line():
     fig, ax = plt.subplots(1, 1)
     df.groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8))
     st.pyplot(fig)
-
+    st.dataframe(df.groupby('YEAR')[show].sum())
 
 def bi_graph_line(column, i):
     fig, ax = plt.subplots(1, 1)
     df[df[column] == i].groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8), title=column + ': ' + str(i));
     st.pyplot(fig)
+    st.dataframe(df[df[column] == i].groupby('YEAR')[show].sum())
 
 
 def multiple_graph_line(column_1, i, column_2, j):
     fig, ax = plt.subplots(1, 1)
     df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum().plot( ax = ax, figsize=(12, 8), title = column_1 + ': ' + str(i) + ' and ' + column_2 + ': '+ str(j));
     st.pyplot(fig)
+    st.dataframe(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum())
 
 def line_graph():
     if len(show) != 0:
