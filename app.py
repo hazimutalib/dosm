@@ -37,7 +37,7 @@ def multiple_graph_line(column_1, i, column_2, j):
 def line_graph():
     if len(show) != 0:
         columns = []
-        columns = st.multiselect('Feature(s):', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'], key='8')
+        columns = st.multiselect('Specification(s):', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'], key='8')
         if ('SITC 1 DIGIT' in columns) & ('SITC 2 DIGIT' in columns):
             st.warning("You may only choose either one of SITC 1 DIGIT and SITC 2 DIGIT")
         else:
