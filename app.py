@@ -52,5 +52,7 @@ def line_graph():
                 single_graph_line()
     else:
         st.warning('Select at least one metric!')
-st.subheader("Time-Series Graph of Malaysia's Trade Perfomance")
+st.subheader("Time-Series Graph of Malaysia's Trade Perfomance from 2013-2019")
 line_graph()
+
+st.subheader("Bar Graph Graph of Malaysia's Trade Perfomance")
