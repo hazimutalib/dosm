@@ -11,7 +11,7 @@ st.info("Instant Dashboard of Malaysia's Trade Perfomance")
 df = pd.read_csv('trade_new.csv')
 
 show = []
-show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default = ['IMPORT (MILLION RM)'], key='1')
+show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default = ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], key='1')
 
 def single_graph_line():
     fig, ax = plt.subplots(1, 1)
