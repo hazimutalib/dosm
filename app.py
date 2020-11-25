@@ -7,48 +7,121 @@ sns.set()
 import base64
 
 st.write(""" # Malaysia's Trade Perfomance Dashboard Application """)
-st.info("Instant Dashboard of Malaysia's Trade Perfomance")
 
 df = pd.read_csv('trade_new.csv')
+
+sitc1 = st.radio("SITC 1 DIGIT's Description:", ['No', 'Yes'])
+if sitc1 == 'Yes':
+    table1 = pd.read_csv('sitc_1.csv')
+    st.dataframe(table1)
+
+sitc2 = st.radio("SITC 2 DIGIT's Description:", ['No', 'Yes'])
+if sitc2 == 'Yes':
+    table2 = pd.read_csv('sitc_2.csv')
+    st.dataframe(table2)
 
 def get_table_download_link_drop_index(df):
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
-    return f'<a href="data:file/csv;base64,{b64}" download="my_trade_whole.csv">Download the whole csv file here</a>'
-
-st.markdown(get_table_download_link_drop_index(df),  unsafe_allow_html=True)
+    return f'<a href="data:file/csv;base64,{b64}" download="trade_data.csv">Download the whole csv</a>'
 
 def get_table_download_link(df):
     csv = df.to_csv(index=True)
     b64 = base64.b64encode(csv.encode()).decode()
-    return f'<a href="data:file/csv;base64,{b64}" download="my_trade.csv">Download csv file</a>'
+    return f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download csv file</a>'
 
-show = []
-show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default = ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], key='1')
+graph = st.sidebar.selectbox('Type of graph:', ['Time-Series', 'Bar Chart', 'Pie Chart'])
+
+if graph == 'Pie Chart':
+    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
+else:
+    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], key='1')
+
+
 
 def single_graph_line():
     fig, ax = plt.subplots(1, 1)
     df.groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia from 2013 to 2019")
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia from 2013 to 2019")
-    st.dataframe(df.groupby('YEAR')[show].sum())
-    st.markdown(get_table_download_link(df.groupby('YEAR')[show].sum()),  unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia from 2013 to 2019")
+        st.dataframe(df.groupby('YEAR')[show].sum())
+        st.markdown(get_table_download_link(df.groupby('YEAR')[show].sum()), unsafe_allow_html=True)
+    growth = st.radio('Show Growth Rate:' , ['No', 'Yes'])
+    if growth == 'Yes':
+        fig1, ax1 = plt.subplots()
+        year = df.groupby('YEAR')[show].sum()
+        list = []
+        for metric in show:
+            if  'DEFICIT/SURPLUS (MILLION RM)' in show:
+                show.remove('DEFICIT/SURPLUS (MILLION RM)')
+            lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
+            year[lol] = year[metric].pct_change() * 100
+            list.append(lol)
+        year[list].dropna().plot(ax=ax1, figsize=(12, 8), title = "Growth Rate of Malaysia's Trade Perfomance from 2014 to 2019")
+        st.pyplot(fig1)
+        gr = st.radio('Show Growth Rate Datasets:', ['No', 'Yes'])
+        if gr == 'Yes':
+            st.text("Growth Rate of Malaysia's Trade Perfomance from 2014 to 2019")
+            st.dataframe(year[list])
+            st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
 
 def bi_graph_line(column, i):
     fig, ax = plt.subplots(1, 1)
     df[df[column] == i].groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i));
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i))
-    st.dataframe(df[df[column] == i].groupby('YEAR')[show].sum())
-    st.markdown(get_table_download_link(df[df[column] == i].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i))
+        st.dataframe(df[df[column] == i].groupby('YEAR')[show].sum())
+        st.markdown(get_table_download_link(df[df[column] == i].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
+    growth = st.radio('Show Growth Rate:', ['No', 'Yes'])
+    if growth == 'Yes':
+        fig1, ax1 = plt.subplots()
+        year = df[df[column] == i].groupby('YEAR')[show].sum()
+        list = []
+        for metric in show:
+            if  'DEFICIT/SURPLUS (MILLION RM)' in show:
+                show.remove('DEFICIT/SURPLUS (MILLION RM)')
+            lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
+            year[lol] = year[metric].pct_change() * 100
+            list.append(lol)
+        year[list].dropna().plot(ax=ax1, figsize=(12, 8), title = "Growth Rate of Malaysia's Trade Perfomance in {}: {} from 2014 to 2019".format(column,i))
+        st.pyplot(fig1)
+        gr = st.radio('Show Growth Rate Datasets:', ['No', 'Yes'])
+        if gr == 'Yes':
+            st.text("Growth Rate of Malaysia's Trade Perfomance in {}: {} from 2014 to 2019".format(column,i))
+            st.dataframe(year[list])
+            st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
 
 def multiple_graph_line(column_1, i, column_2, j):
     fig, ax = plt.subplots(1, 1)
     df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum().plot( ax = ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j));
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j))
-    st.dataframe(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum())
-    st.markdown(get_table_download_link(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j))
+        st.dataframe(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum())
+        st.markdown(get_table_download_link(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
+    growth = st.radio('Show Growth Rate:', ['No', 'Yes'])
+    if growth == 'Yes':
+        fig1, ax1 = plt.subplots()
+        year = df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()
+        list = []
+        for metric in show:
+            if  'DEFICIT/SURPLUS (MILLION RM)' in show:
+                show.remove('DEFICIT/SURPLUS (MILLION RM)')
+            lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
+            year[lol] = year[metric].pct_change() * 100
+            list.append(lol)
+        year[list].dropna().plot(ax=ax1, figsize=(12, 8), title = "Growth Rate of Malaysia's Trade Perfomance in {}: {} and {}: {} from 2014 to 2019". format(column_1, i, column_2, j))
+        st.pyplot(fig1)
+        gr = st.radio('Show Growth Rate Datasets:', ['No', 'Yes'])
+        if gr == 'Yes':
+            st.text("Growth Rate of Malaysia's Trade Perfomance in {}: {} and {}: {} from 2014 to 2019". format(column_1, i, column_2, j))
+            st.dataframe(year[list])
+            st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
 
 def line_graph():
     st.subheader("Time-Series Graph of Malaysia's Trade Perfomance from 2013 to 2019")
@@ -75,27 +148,33 @@ def single_graph_bar(column,sort):
     k = st.sidebar.slider('Top:', 1, df[column].nunique(), 7, key='22')
     df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia based on {}".format(column))
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia based on {}".format(column))
-    st.dataframe(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
-    st.markdown(get_table_download_link(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia based on {}".format(column))
+        st.dataframe(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
+        st.markdown(get_table_download_link(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
 def bi_graph_bar(column_1, column_2, i, sort):
     fig, ax = plt.subplots(1, 1)
     k = st.sidebar.slider('Top:', 1, df[column_1].nunique(), 7, key='23')
     df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia based on {} in {}: {}".format(column_1,column_2, i));
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia based on {} in {}: {}".format(column_1,column_2, i))
-    st.dataframe(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
-    st.markdown(get_table_download_link(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia based on {} in {}: {}".format(column_1,column_2, i))
+        st.dataframe(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
+        st.markdown(get_table_download_link(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
 def multiple_graph_bar(column_1, column_2, i, column_3, j, sort):
     fig, ax = plt.subplots(1, 1)
     k = st.sidebar.slider('Top:', 1, df[column_1].nunique(), 7, key='24')
     df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j));
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j))
-    st.dataframe(df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
-    st.markdown(get_table_download_link(df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j))
+        st.dataframe(df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
+        st.markdown(get_table_download_link(df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
 
 def bar_graph():
@@ -133,9 +212,11 @@ def single_pie(column,k,sort):
     fig, ax = plt.subplots()
     df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False).plot.pie(y=sort, autopct='%1.1f%%', ax = ax, figsize=(12,8), legend = False, title = "Trade Perfomance of Malaysia based on {}".format(column))
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia based on {}".format(column))
-    st.dataframe(df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False))
-    st.markdown(get_table_download_link(df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False)),unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia based on {}".format(column))
+        st.dataframe(df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False))
+        st.markdown(get_table_download_link(df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False)),unsafe_allow_html=True)
 
 def bi_pie(column_1, k, column_2, i, sort):
     pie = df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False)
@@ -145,9 +226,11 @@ def bi_pie(column_1, k, column_2, i, sort):
     fig, ax = plt.subplots(1, 1)
     df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False).plot.pie(y=sort, autopct='%1.1f%%', ax=ax,figsize=(12, 8), legend = False, title = "Trade Perfomance of Malaysia based on {} in {}: {}".format(column_1, column_2, i))
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia based on {} in {}: {}".format(column_1, column_2, i))
-    st.dataframe(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False))
-    st.markdown(get_table_download_link(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False)),unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia based on {} in {}: {}".format(column_1, column_2, i))
+        st.dataframe(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False))
+        st.markdown(get_table_download_link(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False)),unsafe_allow_html=True)
 
 def multiple_pie(column_1, k, column_2, i, column_3, j, sort):
     pie = df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False)
@@ -157,9 +240,11 @@ def multiple_pie(column_1, k, column_2, i, column_3, j, sort):
     fig, ax = plt.subplots(1, 1)
     df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False).plot.pie(y=sort, autopct='%1.1f%%', legend = False, ax=ax,figsize=(12, 8), title = "Trade Perfomance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j))
     st.pyplot(fig)
-    st.text("Trade Perfomance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j))
-    st.dataframe(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False))
-    st.markdown(get_table_download_link(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False)),unsafe_allow_html=True)
+    data = st.radio('Show Datasets:', ['No', 'Yes'])
+    if data == 'Yes':
+        st.text("Trade Perfomance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j))
+        st.dataframe(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False))
+        st.markdown(get_table_download_link(df1.groupby(column_1)[show].sum().sort_values(by = sort, ascending = False)),unsafe_allow_html=True)
 
 def pie_graph():
     st.subheader("Pie Chart of Malaysia's Trade Perfomance")
@@ -188,12 +273,12 @@ def pie_graph():
 
 
 def plot_graph():
-    graph = st.selectbox('Type of graph:', ['Time-Series', 'Bar Chart', 'Pie Chart'])
-    if graph == 'Bar Chart':
-        bar_graph()
-    elif graph == 'Time-Series':
-        line_graph()
-    else:
+    if graph == 'Pie Chart':
         pie_graph()
-
+    elif graph == 'Time-Series':
+       line_graph()
+    else:
+        bar_graph()
+        
 plot_graph()
+
