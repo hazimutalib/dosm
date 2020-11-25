@@ -35,7 +35,7 @@ graph = st.sidebar.selectbox('Type of graph:', ['Time-Series', 'Bar Chart', 'Pie
 if graph == 'Pie Chart':
     show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 else:
-    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], key='1')
+    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 
 
 
