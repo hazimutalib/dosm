@@ -32,7 +32,7 @@ def get_table_download_link(data):
 
 graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP'])
 
-if (graph == 'Pie Chart') or (graph == 'Tree Map'):
+if (graph == 'PIE CHART') or (graph == 'TREE MAP'):
     show = st.sidebar.selectbox('Metric:', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 else:
     show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
