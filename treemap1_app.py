@@ -15,10 +15,9 @@ df_country = pd.read_csv("region.csv")
 feature = st.selectbox('Feature:', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR'])
 metric = st.selectbox('Metric:', ['IMPORT (MILLION RM)','EXPORT (MILLION RM)'] )
 if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
-    columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(
-        ['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis=1).columns, key='52')
+    columns = st.selectbox('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis=1).columns, key='52')
 else:
-    columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(feature, axis=1).columns,  key = '53')
+    columns = st.selectbox('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(feature, axis=1).columns,  key = '53')
 
 i = st.selectbox(columns + ':', np.sort(df[columns].unique()), key='3')
 
