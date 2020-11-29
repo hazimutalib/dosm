@@ -10,13 +10,11 @@ st.write(""" # Malaysia's Trade Perfomance Dashboard Application """)
 
 df = pd.read_csv('trade_new.csv')
 
-sitc1 = st.radio("SITC 1 DIGIT's Description:", ['No', 'Yes'])
-if sitc1 == 'Yes':
+if st.button("SITC 1 DIGIT's Description"):
     table1 = pd.read_csv('sitc_1.csv')
     st.dataframe(table1)
 
-sitc2 = st.radio("SITC 2 DIGIT's Description:", ['No', 'Yes'])
-if sitc2 == 'Yes':
+if st.button("SITC 2 DIGIT's Description"):
     table2 = pd.read_csv('sitc_2.csv')
     st.dataframe(table2)
 
