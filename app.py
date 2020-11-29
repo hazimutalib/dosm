@@ -49,9 +49,9 @@ def single_graph_line():
         fig1, ax1 = plt.subplots()
         year = df.groupby('YEAR')[show].sum()
         list = []
+        if 'DEFICIT/SURPLUS (MILLION RM)' in show:
+            show.remove('DEFICIT/SURPLUS (MILLION RM)')
         for metric in show:
-            if 'DEFICIT/SURPLUS (MILLION RM)' in show:
-                show.remove('DEFICIT/SURPLUS (MILLION RM)')
             lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
             year[lol] = year[metric].pct_change() * 100
             list.append(lol)
@@ -70,9 +70,9 @@ def bi_graph_line(column, i):
         fig1, ax1 = plt.subplots()
         year = df[df[column] == i].groupby('YEAR')[show].sum()
         list = []
+        if 'DEFICIT/SURPLUS (MILLION RM)' in show:
+            show.remove('DEFICIT/SURPLUS (MILLION RM)')
         for metric in show:
-            if 'DEFICIT/SURPLUS (MILLION RM)' in show:
-                show.remove('DEFICIT/SURPLUS (MILLION RM)')
             lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
             year[lol] = year[metric].pct_change() * 100
             list.append(lol)
@@ -93,9 +93,9 @@ def multiple_graph_line(column_1, i, column_2, j):
         fig1, ax1 = plt.subplots()
         year = df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()
         list = []
+        if 'DEFICIT/SURPLUS (MILLION RM)' in show:
+            show.remove('DEFICIT/SURPLUS (MILLION RM)')
         for metric in show:
-            if 'DEFICIT/SURPLUS (MILLION RM)' in show:
-                show.remove('DEFICIT/SURPLUS (MILLION RM)')
             lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
             year[lol] = year[metric].pct_change() * 100
             list.append(lol)
