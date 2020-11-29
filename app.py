@@ -10,11 +10,11 @@ st.write(""" # Malaysia's Trade Performance Dashboard Application """)
 
 df = pd.read_csv('trade_new.csv')
 
-if st.button("SITC 1 DIGIT's Description"):
+if st.sidebar.button("SITC 1 DIGIT's Description"):
     table1 = pd.read_csv('sitc_1.csv')
     st.dataframe(table1)
 
-if st.button("SITC 2 DIGIT's Description"):
+if st.sidebar.button("SITC 2 DIGIT's Description"):
     table2 = pd.read_csv('sitc_2.csv')
     st.dataframe(table2)
 
@@ -63,7 +63,7 @@ def multiple_graph_line(column_1, i, column_2, j):
         st.text("Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j))
         st.dataframe(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
- 
+
 def line_graph():
     st.subheader("Time-Series Graph of Malaysia's Trade Perfomance from 2013 to 2019")
     if len(show) != 0:
