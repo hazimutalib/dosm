@@ -15,6 +15,7 @@ df_country = pd.read_csv("region.csv")
 
 feature = st.selectbox('Feature:', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR'])
 metric = st.selectbox('Metric:', ['IMPORT (MILLION RM)','EXPORT (MILLION RM)'] )
+
 if feature == 'COUNTRY':
     df_group = df.groupby('COUNTRY')[metric].sum().reset_index()
     df_merge = df_group.merge(df_country, on='COUNTRY', how='inner')

@@ -118,7 +118,7 @@ def bar_graph():
     if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
         columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis = 1).columns,  key = '52')
     else:
-        columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR',]].drop(feature, axis = 1).columns,  key = '53')
+        columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(feature, axis = 1).columns,  key = '53')
     try:
         if ('SITC 1 DIGIT' in columns) & ('SITC 2 DIGIT' in columns):
             st.write("You may only choose either one of SITC 1 DIGIT and SITC 2 DIGIT")
