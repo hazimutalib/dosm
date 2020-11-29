@@ -30,12 +30,13 @@ def get_table_download_link(df):
     b64 = base64.b64encode(csv.encode()).decode()
     return f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download csv file</a>'
 
+
 graph = st.sidebar.selectbox('Type of graph:', ['Time-Series', 'Bar Chart', 'Pie Chart'])
 
 if graph == 'Pie Chart':
-    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
+    show = st.sidebar.selectbox('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], key='1')
 else:
-    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
+    show = st.sidebar.selectbox('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], key='1')
 
 
 
@@ -68,9 +69,9 @@ def single_graph_line():
             st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
 
 def bi_graph_line(column, i):
-    fig, ax = plt.subplots(len(i), 1, figsize=(12, 8*len(i)))
+    fig, ax = plt.subplots(1, 1, figsize=(12, 8))
     for z in range(len(i)):
-        df[df[column] == i[z]].groupby('YEAR')[show].sum().plot(ax=ax[z],  title = "Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i[z]));
+        df[df[column] == i[z]].groupby('YEAR')[[show]].sum().rename(columns = {show : i[z]}).plot(ax=ax,  title = "Trade Perfomance of Malaysia in from 2013 to 2019");
     st.pyplot(fig)
     data = st.radio('Show Datasets:', ['No', 'Yes'])
     if data == 'Yes':
