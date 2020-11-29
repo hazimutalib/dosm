@@ -112,7 +112,7 @@ def multiple_graph_bar(column_1, column_2, i, column_3, j, sort, k):
 
 
 def bar_graph():
-    st.subheader("Pie Chart of Malaysia's Trade Performance")
+    st.subheader("Bar Chart of Malaysia's Trade Performance")
     feature = st.sidebar.selectbox('Feature:', ['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'])
     k = st.sidebar.slider('Top:', 1, df[feature].nunique(), 7, key='22')
     if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
