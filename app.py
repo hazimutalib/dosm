@@ -42,30 +42,30 @@ def single_graph_line():
     df.groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia from 2013 to 2019")
     st.pyplot(fig)
     if st.button('Show Datasets'):
-        st.text("Trade Perfomance of Malaysia from 2013 to 2019")
+        st.text("Trade Performance of Malaysia from 2013 to 2019")
         st.dataframe(df.groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df.groupby('YEAR')[show].sum()), unsafe_allow_html=True)
 
 def bi_graph_line(column, i):
     fig, ax = plt.subplots(1, 1)
-    df[df[column] == i].groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i));
+    df[df[column] == i].groupby('YEAR')[show].sum().plot(ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia in {}: {} from 2013 to 2019".format(column,i));
     st.pyplot(fig)
     if st.button('Show Datasets'):
-        st.text("Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i))
+        st.text("Trade Performance of Malaysia in {}: {} from 2013 to 2019".format(column,i))
         st.dataframe(df[df[column] == i].groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df[df[column] == i].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
 
 def multiple_graph_line(column_1, i, column_2, j):
     fig, ax = plt.subplots(1, 1)
-    df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum().plot( ax = ax, figsize=(12, 8), title = "Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j));
+    df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum().plot( ax = ax, figsize=(12, 8), title = "Trade Performance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j));
     st.pyplot(fig)
     if st.button('Show Datasets'):
-        st.text("Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j))
+        st.text("Trade Performance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j))
         st.dataframe(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
 
 def line_graph():
-    st.subheader("Time-Series Graph of Malaysia's Trade Perfomance from 2013 to 2019")
+    st.subheader("Time-Series Graph of Malaysia's Trade Performance from 2013 to 2019")
     if len(show) != 0:
         columns = []
         columns = st.sidebar.multiselect('Specification(s):', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'], key='8')
