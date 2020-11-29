@@ -20,7 +20,13 @@ if feature == 'COUNTRY':
     df_merge = df_group.merge(df_country, on='COUNTRY', how='inner')
     df_merge = df_merge[df_merge[metric] > 0]
     df_merge["WORLD"] = "WORLD"
-    fig = px.treemap(df_merge, path=['WORLD', 'Region', 'COUNTRY'], values=metric, color=metric, hover_data=[metric], color_continuous_scale='RdBu')
+    fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=metric, color=metric, hover_data=[metric], color_continuous_scale='RdBu')
+    st.plotly_chart(fig)
+elif feature == 'SITC 2 DIGIT':
+    df_merge = df.groupby([feature,'SITC 1 DIGIT'])[metric].sum().reset_index()
+    df_merge = df_merge[df_merge[metric] > 0]
+    df_merge["COMMODITY"] = "COMMODITY"
+    fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=metric, color=metric, hover_data=[metric], color_continuous_scale='RdBu')
     st.plotly_chart(fig)
 else:
     fig = px.treemap(df, path=[feature], values=metric, color=metric, hover_data=[metric],color_continuous_scale='RdBu')

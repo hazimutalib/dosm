@@ -113,12 +113,12 @@ def multiple_graph_bar(column_1, column_2, i, column_3, j, sort, k):
 
 def bar_graph():
     st.subheader("Bar Chart of Malaysia's Trade Performance")
-    feature = st.sidebar.selectbox('Feature:', ['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'])
+    feature = st.sidebar.selectbox('Feature:', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR'])
     k = st.sidebar.slider('Top:', 1, df[feature].nunique(), 7, key='22')
     if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
-        columns = st.sidebar.multiselect('Specification(s):', df[['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT']].drop(['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis = 1).columns,  key = '52')
+        columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis = 1).columns,  key = '52')
     else:
-        columns = st.sidebar.multiselect('Specification(s):', df[['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT']].drop(feature, axis = 1).columns,  key = '53')
+        columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR',]].drop(feature, axis = 1).columns,  key = '53')
     try:
         if ('SITC 1 DIGIT' in columns) & ('SITC 2 DIGIT' in columns):
             st.write("You may only choose either one of SITC 1 DIGIT and SITC 2 DIGIT")
@@ -179,7 +179,7 @@ def multiple_pie(column_1, k, column_2, i, column_3, j, sort):
 
 def pie_graph():
     st.subheader("Pie Chart of Malaysia's Trade Performance")
-    feature = st.sidebar.selectbox('Feature:', ['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'], key = '51')
+    feature = st.sidebar.selectbox('Feature:', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR'], key = '51')
     k = st.sidebar.slider('Top:', 1, df[feature].nunique(), 5, key='31')
     columns = st.sidebar.multiselect('Specification(s):', df[['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT']].drop(feature, axis=1).columns, key = '50')
     try:
