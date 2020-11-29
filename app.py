@@ -45,23 +45,6 @@ def single_graph_line():
         st.text("Trade Perfomance of Malaysia from 2013 to 2019")
         st.dataframe(df.groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df.groupby('YEAR')[show].sum()), unsafe_allow_html=True)
-    if st.button('Show Growth Rate'):
-        fig1, ax1 = plt.subplots()
-        year = df.groupby('YEAR')[show].sum()
-        list = []
-        for metric in show:
-            if  'DEFICIT/SURPLUS (MILLION RM)' in show:
-                show.remove('DEFICIT/SURPLUS (MILLION RM)')
-            lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
-            year[lol] = year[metric].pct_change() * 100
-            list.append(lol)
-        year[list].dropna().plot(ax=ax1, figsize=(12, 8), title = "Growth Rate of Malaysia's Trade Perfomance from 2014 to 2019")
-        st.pyplot(fig1)
-        gr = st.radio('Show Growth Rate Datasets:', ['No', 'Yes'])
-        if gr == 'Yes':
-            st.text("Growth Rate of Malaysia's Trade Perfomance from 2014 to 2019")
-            st.dataframe(year[list])
-            st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
 
 def bi_graph_line(column, i):
     fig, ax = plt.subplots(1, 1)
@@ -71,23 +54,6 @@ def bi_graph_line(column, i):
         st.text("Trade Perfomance of Malaysia in {}: {} from 2013 to 2019".format(column,i))
         st.dataframe(df[df[column] == i].groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df[df[column] == i].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
-    if st.button('Show Growth Rate'):
-        fig1, ax1 = plt.subplots()
-        year = df[df[column] == i].groupby('YEAR')[show].sum()
-        list = []
-        for metric in show:
-            if  'DEFICIT/SURPLUS (MILLION RM)' in show:
-                show.remove('DEFICIT/SURPLUS (MILLION RM)')
-            lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
-            year[lol] = year[metric].pct_change() * 100
-            list.append(lol)
-        year[list].dropna().plot(ax=ax1, figsize=(12, 8), title = "Growth Rate of Malaysia's Trade Perfomance in {}: {} from 2014 to 2019".format(column,i))
-        st.pyplot(fig1)
-        gr = st.radio('Show Growth Rate Datasets:', ['No', 'Yes'])
-        if gr == 'Yes':
-            st.text("Growth Rate of Malaysia's Trade Perfomance in {}: {} from 2014 to 2019".format(column,i))
-            st.dataframe(year[list])
-            st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
 
 def multiple_graph_line(column_1, i, column_2, j):
     fig, ax = plt.subplots(1, 1)
@@ -97,24 +63,7 @@ def multiple_graph_line(column_1, i, column_2, j):
         st.text("Trade Perfomance of Malaysia in {}: {} and {}: {} from 2013 to 2019".format(column_1, i, column_2, j))
         st.dataframe(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum())
         st.markdown(get_table_download_link(df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()), unsafe_allow_html=True)
-    if st.button('Show Growth Rate'):
-        fig1, ax1 = plt.subplots()
-        year = df[(df[column_1] == i) & (df[column_2] == j)].groupby('YEAR')[show].sum()
-        list = []
-        for metric in show:
-            if  'DEFICIT/SURPLUS (MILLION RM)' in show:
-                show.remove('DEFICIT/SURPLUS (MILLION RM)')
-            lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
-            year[lol] = year[metric].pct_change() * 100
-            list.append(lol)
-        year[list].dropna().plot(ax=ax1, figsize=(12, 8), title = "Growth Rate of Malaysia's Trade Perfomance in {}: {} and {}: {} from 2014 to 2019". format(column_1, i, column_2, j))
-        st.pyplot(fig1)
-        gr = st.button('Show Growth Rate Datasets:', ['No', 'Yes'])
-        if gr == 'Yes':
-            st.text("Growth Rate of Malaysia's Trade Perfomance in {}: {} and {}: {} from 2014 to 2019". format(column_1, i, column_2, j))
-            st.dataframe(year[list])
-            st.markdown(get_table_download_link(year[list]), unsafe_allow_html=True)
-
+ 
 def line_graph():
     st.subheader("Time-Series Graph of Malaysia's Trade Perfomance from 2013 to 2019")
     if len(show) != 0:
