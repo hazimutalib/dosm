@@ -35,7 +35,10 @@ def single_graph_tree(feature):
 
 def bi_graph_tree(feature,column, i):
     try:
-        title = "Trade Performance of Malaysia based on {} in {}: {} from 2013 to 2019".format(feature, column, i)
+        if column == 'YEAR':
+            title = "Trade Performance of Malaysia based on {} in {}: {}".format(feature, column, i)
+        else:
+            title = "Trade Performance of Malaysia based on {} in {}: {} from 2013 to 2019".format(feature, column, i)
         if feature == 'COUNTRY':
             df_group = df[df[column] == i].groupby('COUNTRY')[metric].sum().reset_index()
             df_merge = df_group.merge(df_country, on='COUNTRY', how='inner')
