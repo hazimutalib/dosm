@@ -83,9 +83,8 @@ def line_graph():
     else:
         st.warning('Select at least one metric!')
 
-def single_graph_bar(column,sort):
+def single_graph_bar(column,sort,k):
     fig, ax = plt.subplots(1, 1)
-    k = st.sidebar.slider('Top:', 1, df[column].nunique(), 7, key='22')
     df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia based on {}".format(column))
     st.pyplot(fig)
     if st.button('Show Datasets'):
@@ -93,9 +92,8 @@ def single_graph_bar(column,sort):
         st.dataframe(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
         st.markdown(get_table_download_link(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
-def bi_graph_bar(column_1, column_2, i, sort):
+def bi_graph_bar(column_1, column_2, i, sort, k):
     fig, ax = plt.subplots(1, 1)
-    k = st.sidebar.slider('Top:', 1, df[column_1].nunique(), 7, key='23')
     df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia based on {} in {}: {}".format(column_1,column_2, i))
     st.pyplot(fig)
     if st.button('Show Datasets'):
@@ -103,9 +101,8 @@ def bi_graph_bar(column_1, column_2, i, sort):
         st.dataframe(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
         st.markdown(get_table_download_link(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
-def multiple_graph_bar(column_1, column_2, i, column_3, j, sort):
+def multiple_graph_bar(column_1, column_2, i, column_3, j, sort, k):
     fig, ax = plt.subplots(1, 1)
-    k = st.sidebar.slider('Top:', 1, df[column_1].nunique(), 7, key='24')
     df[(df[column_2] == i) & (df[column_3] == j)].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia based on {} in {}: {} and {}: {}".format(column_1, column_2, i, column_3, j))
     st.pyplot(fig)
     if st.button('Show Datasets'):
@@ -117,6 +114,7 @@ def multiple_graph_bar(column_1, column_2, i, column_3, j, sort):
 def bar_graph():
     st.subheader("Pie Chart of Malaysia's Trade Performance")
     feature = st.sidebar.selectbox('Feature:', ['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'])
+    k = st.sidebar.slider('Top:', 1, df[feature].nunique(), 7, key='22')
     if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
         columns = st.sidebar.multiselect('Specification(s):', df[['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT']].drop(['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis = 1).columns,  key = '52')
     else:
@@ -127,16 +125,16 @@ def bar_graph():
         else:
             if len(columns) == 0:
                 sort = st.sidebar.selectbox('Sort by:', show, key='2')
-                single_graph_bar(feature, sort)
+                single_graph_bar(feature, sort, k)
             elif len(columns) == 1:
                 i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='3')
                 sort = st.sidebar.selectbox('Sort by:', show, key='4')
-                bi_graph_bar(feature, columns[0], i, sort)
+                bi_graph_bar(feature, columns[0], i, sort, k)
             elif len(columns) == 2:
                 i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='5')
                 j = st.sidebar.selectbox(columns[1] + ':', np.sort(df[columns[1]].unique()), key='6')
                 sort = st.sidebar.selectbox('Sort by:', show, key='7')
-                multiple_graph_bar(feature, columns[0], i, columns[1], j, sort)
+                multiple_graph_bar(feature, columns[0], i, columns[1], j, sort, k)
     except KeyError:
         st.warning('Select at least one metric!')
 
@@ -182,8 +180,8 @@ def multiple_pie(column_1, k, column_2, i, column_3, j, sort):
 def pie_graph():
     st.subheader("Pie Chart of Malaysia's Trade Performance")
     feature = st.sidebar.selectbox('Feature:', ['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT'], key = '51')
+    k = st.sidebar.slider('Top:', 1, df[feature].nunique(), 5, key='31')
     columns = st.sidebar.multiselect('Specification(s):', df[['YEAR', 'COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT']].drop(feature, axis=1).columns, key = '50')
-    k = st.sidebar.slider('Top:',1, df[feature].nunique(), 5, key='31')
     try:
         if ('SITC 1 DIGIT' in columns) & ('SITC 2 DIGIT' in columns):
             st.write("You may only choose either one of SITC 1 DIGIT and SITC 2 DIGIT")
