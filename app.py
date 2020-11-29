@@ -30,7 +30,7 @@ def get_table_download_link(data):
     b64 = base64.b64encode(csv.encode()).decode()
     return f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download csv file</a>'
 
-graph = st.sidebar.selectbox('Type of graph:', ['Time-Series', 'Bar Chart', 'Pie Chart', 'Tree Map'])
+graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP'])
 
 if (graph == 'Pie Chart') or (graph == 'Tree Map'):
     show = st.sidebar.selectbox('Metric:', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
@@ -347,11 +347,11 @@ def tree_map():
 
 
 def plot_graph():
-    if graph == 'Pie Chart':
+    if graph == 'PIE CHART':
         pie_graph()
-    elif graph == 'Time-Series':
+    elif graph == 'TIME-SERIES':
        line_graph()
-    elif graph == 'Tree Map':
+    elif graph == 'TREE MAP':
         tree_map()
     else:
         bar_graph()
