@@ -85,7 +85,7 @@ def line_graph():
 
 def single_graph_bar(column,sort,k):
     fig, ax = plt.subplots(1, 1)
-    df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia based on {}".format(column))
+    df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia based on {} from 2013 to 2019".format(column))
     st.pyplot(fig)
     if st.button('Show Datasets'):
         st.text("Trade Performance of Malaysia based on {}".format(column))
@@ -144,7 +144,7 @@ def single_pie(column,k,sort):
     df1 = pie.reset_index()
     df1.loc[df1[sort] < q, column] = 'OTHERS'
     fig, ax = plt.subplots()
-    df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False).plot.pie(y=sort, autopct='%1.1f%%', ax = ax, figsize=(12,8), legend = False, title = "Trade Performance of Malaysia based on {}".format(column))
+    df1.groupby(column)[show].sum().sort_values(by = sort, ascending = False).plot.pie(y=sort, autopct='%1.1f%%', ax = ax, figsize=(12,8), legend = False, title = "Trade Performance of Malaysia based on {} from 2013 to 2019".format(column))
     st.pyplot(fig)
     if st.button('Show Datasets'):
         st.text("Trade Performance of Malaysia based on {}".format(column))
