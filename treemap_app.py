@@ -23,6 +23,5 @@ if feature == 'COUNTRY':
     fig = px.treemap(df_merge, path=['WORLD', 'Region', 'COUNTRY'], values=metric, color=metric, hover_data=[metric], color_continuous_scale='RdBu')
     st.plotly_chart(fig)
 else:
-    df["Year".] = "WORLD"
     fig = px.treemap(df, path=[feature], values=metric, color=metric, hover_data=[metric],color_continuous_scale='RdBu')
     st.plotly_chart(fig)
