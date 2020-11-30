@@ -8,6 +8,18 @@ sns.set()
 import base64
 import plotly.express as px
 
+st.markdown(
+    """
+<style>
+.sidebar .sidebar-content {
+    background-image: linear-gradient(#2e7bcf,#2e7bcf);
+    color: white;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 st.write(""" # Malaysia's Trade Performance Dashboard Application """)
 
 df = pd.read_csv('trade_new.csv')
