@@ -60,8 +60,8 @@ def single_graph_line():
                 lol = '{} GROWTH RATE (%)'.format(metric.split()[0])
                 year[lol] = year[metric].pct_change() * 100
                 list.append(lol)
-                year[list].dropna().plot(ax=ax1, figsize=(12, 8), title="Growth Rate of Malaysia's Trade Perfomance from 2014 to 2019")
-                st.pyplot(fig1)
+            year[list].dropna().plot(ax=ax1, figsize=(12, 8), title="Growth Rate of Malaysia's Trade Perfomance from 2014 to 2019")
+            st.pyplot(fig1)
 
 def bi_graph_line(column, i):
     fig, ax = plt.subplots(1, 1)
