@@ -13,12 +13,12 @@ df = pd.read_csv('trade_new.csv')
 df_country = pd.read_csv("region.csv")
 
 if st.sidebar.button("SITC 1 DIGIT's Description"):
-    table1 = pd.read_csv('sitc_1.csv')
-    st.dataframe(table1)
+    sitc_1 = pd.read_csv('sitc_1.csv')
+    st.dataframe(sitc_1)
 
 if st.sidebar.button("SITC 2 DIGIT's Description"):
-    table2 = pd.read_csv('sitc_2.csv')
-    st.dataframe(table2)
+    sitc_2 = pd.read_csv('sitc_2.csv')
+    st.dataframe(sitc_2)
 
 def get_table_download_link_drop_index(data):
     csv = data.to_csv(index=False)
@@ -367,7 +367,6 @@ def tree_map():
 def bubble_graph():
     year = st.slider('YEAR:', 2013, 2019, 2018)
     rca = pd.read_csv('Malaysia_RCA_stats.csv')
-    sitc_1 = pd.read_csv('sitc_1.csv')
     rca = rca.drop(['Reporter Name', 'Partner Name', 'Trade Flow'], axis=1)
     rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
     rca_melt = rca_melt.rename(columns={'variable': 'YEAR', 'value': 'RCA Value'})
