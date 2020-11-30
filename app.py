@@ -135,7 +135,7 @@ def single_graph_bar(column,sort,k):
     df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = "Trade Performance of Malaysia based on {} from 2013 to 2019".format(column))
     st.pyplot(fig)
     if st.button('Show Datasets'):
-        st.text("Trade Performance of Malaysia based on {}".format(column))
+        st.text("Trade Performance of Malaysia based on {} from 2013 to 2019".format(column))
         st.dataframe(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
         st.markdown(get_table_download_link(df.groupby(column)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
@@ -148,7 +148,7 @@ def bi_graph_bar(column_1, column_2, i, sort, k):
     df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k].plot(kind='bar', ax=ax, figsize=(12, 8), title = title)
     st.pyplot(fig)
     if st.button('Show Datasets'):
-        st.text("Trade Performance of Malaysia based on {} in {}: {}".format(column_1,column_2, i))
+        st.text(title)
         st.dataframe(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k])
         st.markdown(get_table_download_link(df[df[column_2] == i].groupby(column_1)[show].sum().sort_values(by=sort, ascending=False).iloc[:k]),unsafe_allow_html=True)
 
@@ -215,7 +215,7 @@ def bi_pie(column_1, k, column_2, i):
     df1.groupby(column_1)[[show]].sum().sort_values(by = show, ascending = False).plot.pie(y=show, autopct='%1.1f%%', ax=ax,figsize=(12, 8), legend = False, title = title)
     st.pyplot(fig)
     if st.button('Show Datasets'):
-        st.text("Trade Performance of Malaysia based on {} in {}: {}".format(column_1, column_2, i))
+        st.text(title)
         st.dataframe(df1.groupby(column_1)[[show]].sum().sort_values(by = show, ascending = False))
         st.markdown(get_table_download_link(df1.groupby(column_1)[[show]].sum().sort_values(by = show, ascending = False)),unsafe_allow_html=True)
 
