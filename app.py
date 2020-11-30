@@ -273,15 +273,18 @@ def single_graph_tree(feature):
         df_merge = df_merge[df_merge[show] > 0]
         df_merge["WORLD"] = "WORLD"
         fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show, hover_data=[show],color_continuous_scale='RdBu', title = title)
+        fig.update_layout(height=800, width=900)
         st.plotly_chart(fig)
     elif feature == 'SITC 2 DIGIT':
         df_merge = df.groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
         df_merge = df_merge[df_merge[show] > 0]
         df_merge["COMMODITY"] = "COMMODITY"
         fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title = title)
+        fig.update_layout(height=800, width=900)
         st.plotly_chart(fig)
     else:
         fig = px.treemap(df, path=[feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title = title)
+        fig.update_layout(height=800, width=900)
         st.plotly_chart(fig)
 
 def bi_graph_tree(feature,column, i):
@@ -296,15 +299,18 @@ def bi_graph_tree(feature,column, i):
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["WORLD"] = "WORLD"
             fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show,hover_data=[show], color_continuous_scale='RdBu', title = title)
+            fig.update_layout(height=800, width=900)
             st.plotly_chart(fig)
         elif feature == 'SITC 2 DIGIT':
             df_merge = df[df[column] == i].groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["COMMODITY"] = "COMMODITY"
             fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title =  title)
+            fig.update_layout(height=800, width=900)
             st.plotly_chart(fig)
         else:
             fig = px.treemap(df[df[column] == i], path=[feature], values=show, color=show, hover_data=[show],color_continuous_scale='RdBu', title = title)
+            fig.update_layout(height=800, width=900)
             st.plotly_chart(fig)
     except:
         st.warning('The COUNTRY you have selected is not available!')
@@ -318,6 +324,7 @@ def multiple_graph_tree(feature, column_1, i, column_2, j,):
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["WORLD"] = "WORLD"
             fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show,hover_data=[show], color_continuous_scale='RdBu', title = title)
+            fig.update_layout(height=800, width=900)
             st.plotly_chart(fig)
         elif feature == 'SITC 2 DIGIT':
             df_merge = df[(df[column_1] == i) & (df[column_2] == j)].groupby([feature, 'SITC 1 DIGIT'])[
@@ -325,11 +332,13 @@ def multiple_graph_tree(feature, column_1, i, column_2, j,):
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["COMMODITY"] = "COMMODITY"
             fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title=title)
+            fig.update_layout(height=800, width=900)
             st.plotly_chart(fig)
         else:
             temp = df[(df[column_1] == i) & (df[column_2] == j)]
             temp = temp[temp[show] > 0]
             fig = px.treemap(temp, path=[feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title=title)
+            fig.update_layout(height=800, width=900)
             st.plotly_chart(fig)
     except:
         st.warning('The COUNTRY you have selected is not available!')
@@ -372,15 +381,14 @@ def bubble_graph():
     rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
     rca_melt = rca_melt.rename(columns={'variable': 'YEAR', 'value': 'RCA Value'})
     rca_melt['YEAR'] = rca_melt['YEAR'].astype(str).astype(int)
-    df_import_dynamic = df.groupby(['YEAR', 'SITC 1 DIGIT'])[[show]].sum().reset_index().sort_values(
-        by=['SITC 1 DIGIT', 'YEAR'])
-    df_import_dynamic['Percent Change'] = df_import_dynamic.groupby(['SITC 1 DIGIT'])[[show]].pct_change().fillna(
-        0) * 100
+    df_import_dynamic = df.groupby(['YEAR', 'SITC 1 DIGIT'])[[show]].sum().reset_index().sort_values( by=['SITC 1 DIGIT', 'YEAR'])
+    df_import_dynamic['Percent Change'] = df_import_dynamic.groupby(['SITC 1 DIGIT'])[[show]].pct_change().fillna(0) * 100
     df_import_dynamic = df_import_dynamic.sort_values(by=['YEAR', 'SITC 1 DIGIT'])
     df_import_dynamic = df_import_dynamic.merge(sitc_1, on='SITC 1 DIGIT').merge(rca_melt, on=['YEAR', '1D DESC'])
     df_import_dynamic['SITC 1 DIGIT'] = df_import_dynamic['SITC 1 DIGIT'].astype(str)
     fig = px.scatter(df_import_dynamic.query("YEAR=={}".format(year)), x="RCA Value", y="Percent Change", size=show, color="SITC 1 DIGIT", hover_name="1D DESC", log_x=False, size_max=60)
     fig.update_layout(title_text="Trade Performance of Malaysia on YEAR: {} based on {}".format(year, show.split()[0]))
+    fig.update_layout(height=600, width=900)
     st.plotly_chart(fig)
 
 def area_graph():
@@ -390,11 +398,12 @@ def area_graph():
         df_sitc_1 = df.groupby(['SITC 1 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
         df_sitc_1 = df_sitc_1.merge(sitc_1, on='SITC 1 DIGIT')
         fig = px.area(df_sitc_1, x="YEAR", y="sum", color="1D DESC")
+        fig.update_layout(height=600, width=900)
     else:
         df_sitc_1 = df.groupby(['SITC 2 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
         df_sitc_1 = df_sitc_1.merge(sitc_2, on='SITC 2 DIGIT')
         fig = px.area(df_sitc_1, x="YEAR", y="sum", color="2D DESC")
-        fig.update_layout(showlegend=False)
+        fig.update_layout(showlegend=False, height=600, width=900)
     fig.update_layout(title_text="Trade Performance of Malaysia from 2013 to 2019 based on {}".format(show.split()[0]))
     st.plotly_chart(fig)
 
