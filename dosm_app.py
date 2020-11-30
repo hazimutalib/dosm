@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-
 sns.set()
 import base64
 import plotly.express as px
@@ -46,16 +45,12 @@ def get_table_download_link(data):
     return f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download csv file</a>'
 
 
-graph = st.sidebar.selectbox('Type of graph:',
-                             ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP', 'BUBBLE PLOT', 'AREA PLOT'])
+graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP', 'BUBBLE PLOT', 'AREA PLOT'])
 
-if (graph == 'PIE CHART') or (graph == 'TREE MAP') or (graph == 'BUBBLE PLOT') or (graph == 'AREA PLOT'):
+if (graph == 'PIE CHART') or (graph == 'BUBBLE PLOT') or (graph == 'AREA PLOT') or (graph == 'TREE MAP'):
     show = st.sidebar.selectbox('Metric:', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 else:
-    show = st.sidebar.multiselect('Metric(s):',
-                                  ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'],
-                                  default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
-
+    show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 
 def single_graph_line():
     fig, ax = plt.subplots(1, 1)
@@ -357,7 +352,7 @@ def single_graph_tree(feature):
         df_merge["WORLD"] = "WORLD"
         fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show, hover_data=[show],
                          color_continuous_scale='RdBu', title=title)
-        fig.update_layout(height=700, width=900)
+        fig.update_layout(height=600, width=900)
         st.plotly_chart(fig)
     elif feature == 'SITC 2 DIGIT':
         df_merge = df.groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
@@ -365,12 +360,12 @@ def single_graph_tree(feature):
         df_merge["COMMODITY"] = "COMMODITY"
         fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show,
                          hover_data=[show], color_continuous_scale='RdBu', title=title)
-        fig.update_layout(height=700, width=900)
+        fig.update_layout(height=600, width=900)
         st.plotly_chart(fig)
     else:
         fig = px.treemap(df, path=[feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu',
                          title=title)
-        fig.update_layout(height=700, width=900)
+        fig.update_layout(height=600, width=900)
         st.plotly_chart(fig)
 
 
@@ -387,22 +382,21 @@ def bi_graph_tree(feature, column, i):
             df_merge["WORLD"] = "WORLD"
             fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show, hover_data=[show],
                              color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=700, width=900)
+            fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
         elif feature == 'SITC 2 DIGIT':
             df_merge = df[df[column] == i].groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["COMMODITY"] = "COMMODITY"
-            fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show,
-                             hover_data=[show], color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=700, width=900)
+            fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data =[show], color_continuous_scale='RdBu', title=title)
+            fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
         else:
             fig = px.treemap(df[df[column] == i], path=[feature], values=show, color=show, hover_data=[show],
                              color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=700, width=900)
+            fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
-    except:
+    except KeyError:
         st.warning('The COUNTRY you have selected is not available!')
 
 
@@ -417,7 +411,7 @@ def multiple_graph_tree(feature, column_1, i, column_2, j, ):
             df_merge["WORLD"] = "WORLD"
             fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show, hover_data=[show],
                              color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=700, width=900)
+            fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
         elif feature == 'SITC 2 DIGIT':
             df_merge = df[(df[column_1] == i) & (df[column_2] == j)].groupby([feature, 'SITC 1 DIGIT'])[
@@ -426,52 +420,43 @@ def multiple_graph_tree(feature, column_1, i, column_2, j, ):
             df_merge["COMMODITY"] = "COMMODITY"
             fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show,
                              hover_data=[show], color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=700, width=900)
+            fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
         else:
             temp = df[(df[column_1] == i) & (df[column_2] == j)]
             temp = temp[temp[show] > 0]
             fig = px.treemap(temp, path=[feature], values=show, color=show, hover_data=[show],
                              color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=700, width=900)
+            fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
     except:
         st.warning('The COUNTRY you have selected is not available!')
 
 
-def tree_map():
+def tree_map_good():
     st.subheader("Tree Map of Malaysia's Trade Performance from 2013 to 2019")
-    feature = st.sidebar.selectbox('Feature:', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR'])
-    if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
-        columns = st.sidebar.multiselect('Specification(s):',
-                                         df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(
-                                             ['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis=1).columns, key='52')
+    feature = 'SITC 2 DIGIT'
+    st.write(" ### What Goods Did Malaysia Import/Export?")
+    i = st.slider('YEAR:', 2013, 2019, 2018, key='70')
+    bi_graph_tree(feature, 'YEAR', i)
+
+
+def tree_map_country():
+    st.subheader("Tree Map of Malaysia's Trade Performance from 2013 to 2019")
+    feature = 'COUNTRY'
+    st.write(" ### Where Did Malaysia Import/Export Goods?")
+    i = st.slider('YEAR:', 2013, 2019, 2018, key='70')
+    bi_graph_tree(feature, 'YEAR', i)
+
+def tree_map():
+    tree =  st.sidebar.selectbox('Category:', ['GOODS', 'COUNTRY'])
+    if tree == 'GOODS':
+        tree_map_good()
     else:
-        columns = st.sidebar.multiselect('Specification(s):',
-                                         df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(feature,
-                                                                                                      axis=1).columns,
-                                         key='53')
-    try:
-        if ('SITC 1 DIGIT' in columns) & ('SITC 2 DIGIT' in columns):
-            st.write("You may only choose either one of SITC 1 DIGIT and SITC 2 DIGIT")
-        else:
-            if len(columns) == 0:
-                single_graph_tree(feature)
-            elif len(columns) == 1:
-                if 'YEAR' in columns:
-                    i = st.sidebar.slider(columns[0] + ':', 2013, 2019, 2018, key='60')
-                else:
-                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='3')
-                bi_graph_tree(feature, columns[0], i)
-            elif len(columns) == 2:
-                if 'YEAR' in columns:
-                    i = st.sidebar.slider(columns[0] + ':', 2013, 2019, 2018, key='60')
-                else:
-                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='5')
-                j = st.sidebar.selectbox(columns[1] + ':', np.sort(df[columns[1]].unique()), key='6')
-                multiple_graph_tree(feature, columns[0], i, columns[1], j)
-    except KeyError:
-        st.warning('Select at least one show!')
+        tree_map_country()
+
+
+
 
 
 def bubble_graph():
