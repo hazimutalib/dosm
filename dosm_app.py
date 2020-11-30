@@ -480,7 +480,7 @@ def tree_map():
 
 def bubble_graph():
     st.subheader("Bubble Plot of Malaysia's Trade Performance from 2013 to 2019")
-    year = st.sidebar.slider('YEAR:', 2013, 2019, 2018)
+    year = st.slider('YEAR:', 2013, 2019, 2018)
     rca = pd.read_csv('Malaysia_RCA_stats.csv')
     rca = rca.drop(['Reporter Name', 'Partner Name', 'Trade Flow'], axis=1)
     rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
