@@ -178,11 +178,17 @@ def bar_graph():
                 sort = st.sidebar.selectbox('Sort by:', show, key='2')
                 single_graph_bar(feature, sort, k)
             elif len(columns) == 1:
-                i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='3')
+                if 'YEAR' in columns:
+                    i = st.sidebar.slider(columns[0] + ':', 2013,2019,2018, key='60')
+                else:
+                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='3')
                 sort = st.sidebar.selectbox('Sort by:', show, key='4')
                 bi_graph_bar(feature, columns[0], i, sort, k)
             elif len(columns) == 2:
-                i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='5')
+                if 'YEAR' in columns:
+                    i = st.sidebar.slider(columns[0] + ':', 2013,2019,2018, key='60')
+                else:
+                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='5')
                 j = st.sidebar.selectbox(columns[1] + ':', np.sort(df[columns[1]].unique()), key='6')
                 sort = st.sidebar.selectbox('Sort by:', show, key='7')
                 multiple_graph_bar(feature, columns[0], i, columns[1], j, sort, k)
@@ -244,10 +250,16 @@ def pie_graph():
             if len(columns) == 0:
                 single_pie(feature, k)
             elif len(columns) == 1:
-                i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='33')
+                if 'YEAR' in columns:
+                    i = st.sidebar.slider(columns[0] + ':', 2013,2019,2018, key='60')
+                else:
+                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='33')
                 bi_pie(feature, k, columns[0], i)
             elif len(columns) == 2:
-                i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='35')
+                if 'YEAR' in columns:
+                    i = st.sidebar.slider(columns[0] + ':', 2013,2019,2018, key='60')
+                else:
+                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='35')
                 j = st.sidebar.selectbox(columns[1] + ':', np.sort(df[columns[1]].unique()), key='36')
                 multiple_pie(feature,k, columns[0], i, columns[1], j)
     except KeyError:
@@ -336,10 +348,16 @@ def tree_map():
             if len(columns) == 0:
                 single_graph_tree(feature)
             elif len(columns) == 1:
-                i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='3')
+                if 'YEAR' in columns:
+                    i = st.sidebar.slider(columns[0] + ':', 2013,2019,2018, key='60')
+                else:
+                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='3')
                 bi_graph_tree(feature, columns[0], i)
             elif len(columns) == 2:
-                i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='5')
+                if 'YEAR' in columns:
+                    i = st.sidebar.slider(columns[0] + ':', 2013,2019,2018, key='60')
+                else:
+                    i = st.sidebar.selectbox(columns[0] + ':', np.sort(df[columns[0]].unique()), key='5')
                 j = st.sidebar.selectbox(columns[1] + ':', np.sort(df[columns[1]].unique()), key='6')
                 multiple_graph_tree(feature, columns[0], i, columns[1], j)
     except KeyError:
