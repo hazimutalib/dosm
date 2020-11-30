@@ -273,18 +273,18 @@ def single_graph_tree(feature):
         df_merge = df_merge[df_merge[show] > 0]
         df_merge["WORLD"] = "WORLD"
         fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show, hover_data=[show],color_continuous_scale='RdBu', title = title)
-        fig.update_layout(height=800, width=900)
+        fig.update_layout(height=700, width=900)
         st.plotly_chart(fig)
     elif feature == 'SITC 2 DIGIT':
         df_merge = df.groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
         df_merge = df_merge[df_merge[show] > 0]
         df_merge["COMMODITY"] = "COMMODITY"
         fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title = title)
-        fig.update_layout(height=800, width=900)
+        fig.update_layout(height=700, width=900)
         st.plotly_chart(fig)
     else:
         fig = px.treemap(df, path=[feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title = title)
-        fig.update_layout(height=800, width=900)
+        fig.update_layout(height=700, width=900)
         st.plotly_chart(fig)
 
 def bi_graph_tree(feature,column, i):
@@ -299,18 +299,18 @@ def bi_graph_tree(feature,column, i):
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["WORLD"] = "WORLD"
             fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show,hover_data=[show], color_continuous_scale='RdBu', title = title)
-            fig.update_layout(height=800, width=900)
+            fig.update_layout(height=700, width=900)
             st.plotly_chart(fig)
         elif feature == 'SITC 2 DIGIT':
             df_merge = df[df[column] == i].groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["COMMODITY"] = "COMMODITY"
             fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title =  title)
-            fig.update_layout(height=800, width=900)
+            fig.update_layout(height=700, width=900)
             st.plotly_chart(fig)
         else:
             fig = px.treemap(df[df[column] == i], path=[feature], values=show, color=show, hover_data=[show],color_continuous_scale='RdBu', title = title)
-            fig.update_layout(height=800, width=900)
+            fig.update_layout(height=700, width=900)
             st.plotly_chart(fig)
     except:
         st.warning('The COUNTRY you have selected is not available!')
@@ -324,7 +324,7 @@ def multiple_graph_tree(feature, column_1, i, column_2, j,):
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["WORLD"] = "WORLD"
             fig = px.treemap(df_merge, path=['WORLD', 'Region', feature], values=show, color=show,hover_data=[show], color_continuous_scale='RdBu', title = title)
-            fig.update_layout(height=800, width=900)
+            fig.update_layout(height=700, width=900)
             st.plotly_chart(fig)
         elif feature == 'SITC 2 DIGIT':
             df_merge = df[(df[column_1] == i) & (df[column_2] == j)].groupby([feature, 'SITC 1 DIGIT'])[
@@ -332,13 +332,13 @@ def multiple_graph_tree(feature, column_1, i, column_2, j,):
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["COMMODITY"] = "COMMODITY"
             fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=800, width=900)
+            fig.update_layout(height=700, width=900)
             st.plotly_chart(fig)
         else:
             temp = df[(df[column_1] == i) & (df[column_2] == j)]
             temp = temp[temp[show] > 0]
             fig = px.treemap(temp, path=[feature], values=show, color=show, hover_data=[show], color_continuous_scale='RdBu', title=title)
-            fig.update_layout(height=800, width=900)
+            fig.update_layout(height=700, width=900)
             st.plotly_chart(fig)
     except:
         st.warning('The COUNTRY you have selected is not available!')
