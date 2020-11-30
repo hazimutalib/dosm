@@ -436,7 +436,7 @@ def multiple_graph_tree(feature, column_1, i, column_2, j, ):
 def tree_map_good():
     st.subheader("Tree Map of Malaysia's Trade Performance from 2013 to 2019")
     feature = 'SITC 2 DIGIT'
-    st.write(" ### What Goods Did Malaysia Import/Export?")
+    st.write(" ### What Commodities Did Malaysia Import/Export?")
     i = st.slider('YEAR:', 2013, 2019, 2018, key='70')
     bi_graph_tree(feature, 'YEAR', i)
 
@@ -448,16 +448,35 @@ def tree_map_country():
     i = st.slider('YEAR:', 2013, 2019, 2018, key='70')
     bi_graph_tree(feature, 'YEAR', i)
 
+def tree_map_should():
+    st.subheader("Tree Map of Malaysia's Trade Performance from 2013 to 2019")
+    st.write(" ### Does Malaysia Export What It Should?")
+    rca = pd.read_csv('Malaysia_RCA_stats.csv')
+    rca = rca.drop(['Reporter Name', 'Partner Name', 'Trade Flow'], axis=1)
+    rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
+    rca_melt = rca_melt.rename(columns={'variable': 'YEAR', 'value': 'RCA Value'})
+    rca_melt['YEAR'] = rca_melt['YEAR'].astype(str).astype(int)
+    i = st.slider('YEAR', 2013,2019,2018, key = 88)
+    fig1 = px.treemap(rca_melt.query("YEAR=={}".format(i)), path=['1D DESC'], values='RCA Value', color='RCA Value', hover_name='1D DESC', color_continuous_scale='RdBu', title = 'RCA value of Commodity on YEAR: {}'.format(i))
+    fig1.update_layout(height=600, width=900)
+    st.plotly_chart(fig1)
+    table1 = df.groupby(['YEAR', 'SITC 1 DIGIT'])[['EXPORT (MILLION RM)']].sum().reset_index().sort_values(by=['SITC 1 DIGIT', 'YEAR'])
+    table1['% Change Export'] = table1.groupby(['SITC 1 DIGIT'])['EXPORT (MILLION RM)'].pct_change().fillna(0) * 100
+    table1 = table1.merge(sitc_1, on='SITC 1 DIGIT').merge(rca_melt, on=['YEAR', '1D DESC'])
+    table1['SITC 1 DIGIT'] = table1['SITC 1 DIGIT'].astype(str)
+    table1['TOTAL EXPORT SITC 1'] = df.groupby(['SITC 1 DIGIT', 'YEAR'])['EXPORT (MILLION RM)'].agg(['sum']).reset_index()['sum']
+    fig2 = px.treemap(table1.query("YEAR=={}".format(i)), path=['1D DESC'], values='EXPORT (MILLION RM)', color='EXPORT (MILLION RM)', hover_name='1D DESC', color_continuous_scale='RdBu', title = "Malaysia's Export on YEAR: {}".format(i))
+    fig2.update_layout(height=600, width=1000)
+    st.plotly_chart(fig2)
+
 def tree_map():
-    tree =  st.sidebar.selectbox('Category:', ['GOODS', 'COUNTRY'])
-    if tree == 'GOODS':
+    tree =  st.sidebar.selectbox('Category:', ['COMMODITY', 'COUNTRY', 'DIRECTION'])
+    if tree == 'COMMODITY':
         tree_map_good()
+    elif tree == 'DIRECTION':
+        tree_map_should()
     else:
         tree_map_country()
-
-
-
-
 
 def bubble_graph():
     st.subheader("Bubble Plot of Malaysia's Trade Performance from 2013 to 2019")
