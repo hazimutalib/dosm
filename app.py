@@ -10,14 +10,14 @@ import plotly.express as px
 st.write(""" # Malaysia's Trade Performance Dashboard Application """)
 
 df = pd.read_csv('trade_new.csv')
+sitc_1 = pd.read_csv('sitc_1.csv')
+sitc_2 = pd.read_csv('sitc_2.csv')
 df_country = pd.read_csv("region.csv")
 
 if st.sidebar.button("SITC 1 DIGIT's Description"):
-    sitc_1 = pd.read_csv('sitc_1.csv')
     st.dataframe(sitc_1)
 
 if st.sidebar.button("SITC 2 DIGIT's Description"):
-    sitc_2 = pd.read_csv('sitc_2.csv')
     st.dataframe(sitc_2)
 
 def get_table_download_link_drop_index(data):
@@ -382,13 +382,13 @@ def bubble_graph():
     st.plotly_chart(fig)
 
 def area_graph():
-    sitc = st.selectbox('SITC:', ['SITC 1 DIGIT', 'SITC 2 DIGIT'])
+    sitc = st.sidebar.selectbox('SITC:', ['SITC 1 DIGIT', 'SITC 2 DIGIT'])
     if sitc == 'SITC 1 DIGIT':
-        df_sitc_1 = df_all.groupby(['SITC 1 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
+        df_sitc_1 = df.groupby(['SITC 1 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
         df_sitc_1 = df_sitc_1.merge(sitc_1, on='SITC 1 DIGIT')
         fig = px.area(df_sitc_1, x="YEAR", y="sum", color="1D DESC")
     else:
-        df_sitc_1 = df_all.groupby(['SITC 2 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
+        df_sitc_1 = df.groupby(['SITC 2 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
         df_sitc_1 = df_sitc_1.merge(sitc_2, on='SITC 2 DIGIT')
         fig = px.area(df_sitc_1, x="YEAR", y="sum", color="2D DESC")
         fig.update_layout(showlegend=False)
