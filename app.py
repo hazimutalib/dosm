@@ -395,6 +395,7 @@ def area_graph():
         df_sitc_1 = df_sitc_1.merge(sitc_2, on='SITC 2 DIGIT')
         fig = px.area(df_sitc_1, x="YEAR", y="sum", color="2D DESC")
         fig.update_layout(showlegend=False)
+    fig.update_layout(title_text="Trade Performance of Malaysia from 2013 to 2019")
     st.plotly_chart(fig)
 
 
