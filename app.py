@@ -380,6 +380,7 @@ def bubble_graph():
     df_import_dynamic = df_import_dynamic.merge(sitc_1, on='SITC 1 DIGIT').merge(rca_melt, on=['YEAR', '1D DESC'])
     df_import_dynamic['SITC 1 DIGIT'] = df_import_dynamic['SITC 1 DIGIT'].astype(str)
     fig = px.scatter(df_import_dynamic.query("YEAR=={}".format(year)), x="RCA Value", y="Percent Change", size=show, color="SITC 1 DIGIT", hover_name="1D DESC", log_x=False, size_max=60)
+    fig.update_layout(title_text="Trade Performance of Malaysia on YEAR: {}".format(year))
     st.plotly_chart(fig)
 
 def area_graph():
