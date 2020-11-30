@@ -18,6 +18,7 @@ sitc_1 = pd.read_csv('sitc_1.csv')
 
 show = st.selectbox('Metric:', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 year = st.slider('YEAR:', 2013,2019,2018)
+
 rca = rca.drop(['Reporter Name', 'Partner Name', 'Trade Flow'], axis=1)
 rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
 rca_melt = rca_melt.rename(columns={'variable': 'YEAR', 'value': 'RCA Value'})

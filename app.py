@@ -30,9 +30,9 @@ def get_table_download_link(data):
     b64 = base64.b64encode(csv.encode()).decode()
     return f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download csv file</a>'
 
-graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP'])
+graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP', 'BUBBLE PLOT'])
 
-if (graph == 'PIE CHART') or (graph == 'TREE MAP'):
+if (graph == 'PIE CHART') or (graph == 'TREE MAP') or (graph == 'BUBBLE PLOT'):
     show = st.sidebar.selectbox('Metric:', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 else:
     show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
@@ -364,6 +364,25 @@ def tree_map():
         st.warning('Select at least one show!')
 
 
+def bubble_graph():
+    year = st.slider('YEAR:', 2013, 2019, 2018)
+    rca = pd.read_csv('Malaysia_RCA_stats.csv')
+    sitc_1 = pd.read_csv('sitc_1.csv')
+    rca = rca.drop(['Reporter Name', 'Partner Name', 'Trade Flow'], axis=1)
+    rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
+    rca_melt = rca_melt.rename(columns={'variable': 'YEAR', 'value': 'RCA Value'})
+    rca_melt['YEAR'] = rca_melt['YEAR'].astype(str).astype(int)
+    df_import_dynamic = df.groupby(['YEAR', 'SITC 1 DIGIT'])[[show]].sum().reset_index().sort_values(
+        by=['SITC 1 DIGIT', 'YEAR'])
+    df_import_dynamic['Percent Change'] = df_import_dynamic.groupby(['SITC 1 DIGIT'])[[show]].pct_change().fillna(
+        0) * 100
+    df_import_dynamic = df_import_dynamic.sort_values(by=['YEAR', 'SITC 1 DIGIT'])
+    df_import_dynamic = df_import_dynamic.merge(sitc_1, on='SITC 1 DIGIT').merge(rca_melt, on=['YEAR', '1D DESC'])
+    df_import_dynamic['SITC 1 DIGIT'] = df_import_dynamic['SITC 1 DIGIT'].astype(str)
+    fig = px.scatter(df_import_dynamic.query("YEAR=={}".format(year)), x="RCA Value", y="Percent Change", size=show, color="SITC 1 DIGIT", hover_name="1D DESC", log_x=False, size_max=60)
+    st.plotly_chart(fig)
+
+
 def plot_graph():
     if graph == 'PIE CHART':
         pie_graph()
@@ -371,6 +390,8 @@ def plot_graph():
        line_graph()
     elif graph == 'TREE MAP':
         tree_map()
+    elif graph == 'BUBBLE PLOT':
+        bubble_graph()
     else:
         bar_graph()
         

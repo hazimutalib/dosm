@@ -19,4 +19,5 @@ else:
     df_sitc_1 = df_all.groupby(['SITC 2 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
     df_sitc_1 = df_sitc_1.merge(sitc_2, on='SITC 2 DIGIT')
     fig = px.area(df_sitc_1, x="YEAR", y="sum", color="2D DESC")
+    fig.update_layout(showlegend=False)
 st.plotly_chart(fig)
