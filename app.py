@@ -30,9 +30,9 @@ def get_table_download_link(data):
     b64 = base64.b64encode(csv.encode()).decode()
     return f'<a href="data:file/csv;base64,{b64}" download="data.csv">Download csv file</a>'
 
-graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP', 'BUBBLE PLOT'])
+graph = st.sidebar.selectbox('Type of graph:', ['TIME-SERIES', 'BAR CHART', 'PIE CHART', 'TREE MAP', 'BUBBLE PLOT', 'AREA PLOT'])
 
-if (graph == 'PIE CHART') or (graph == 'TREE MAP') or (graph == 'BUBBLE PLOT'):
+if (graph == 'PIE CHART') or (graph == 'TREE MAP') or (graph == 'BUBBLE PLOT') or (graph == 'AREA PLOT'):
     show = st.sidebar.selectbox('Metric:', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
 else:
     show = st.sidebar.multiselect('Metric(s):', ['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)', 'DEFICIT/SURPLUS (MILLION RM)'], default=['IMPORT (MILLION RM)', 'EXPORT (MILLION RM)'], key='1')
@@ -381,6 +381,20 @@ def bubble_graph():
     fig = px.scatter(df_import_dynamic.query("YEAR=={}".format(year)), x="RCA Value", y="Percent Change", size=show, color="SITC 1 DIGIT", hover_name="1D DESC", log_x=False, size_max=60)
     st.plotly_chart(fig)
 
+def area_graph():
+    sitc = st.selectbox('SITC:', ['SITC 1 DIGIT', 'SITC 2 DIGIT'])
+    if sitc == 'SITC 1 DIGIT':
+        df_sitc_1 = df_all.groupby(['SITC 1 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
+        df_sitc_1 = df_sitc_1.merge(sitc_1, on='SITC 1 DIGIT')
+        fig = px.area(df_sitc_1, x="YEAR", y="sum", color="1D DESC")
+    else:
+        df_sitc_1 = df_all.groupby(['SITC 2 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
+        df_sitc_1 = df_sitc_1.merge(sitc_2, on='SITC 2 DIGIT')
+        fig = px.area(df_sitc_1, x="YEAR", y="sum", color="2D DESC")
+        fig.update_layout(showlegend=False)
+    st.plotly_chart(fig)
+
+
 
 def plot_graph():
     if graph == 'PIE CHART':
@@ -391,6 +405,8 @@ def plot_graph():
         tree_map()
     elif graph == 'BUBBLE PLOT':
         bubble_graph()
+    elif graph == 'AREA PLOT':
+        area_graph()
     else:
         bar_graph()
         
