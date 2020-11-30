@@ -335,7 +335,7 @@ def multiple_graph_tree(feature, column_1, i, column_2, j,):
         st.warning('The COUNTRY you have selected is not available!')
 
 def tree_map():
-    st.subheader("Tree Map of Malaysia's Trade Performance")
+    st.subheader("Tree Map of Malaysia's Trade Performance from 2013 to 2019")
     feature = st.sidebar.selectbox('Feature:', ['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR'])
     if (feature == 'SITC 1 DIGIT') or (feature == 'SITC 2 DIGIT'):
         columns = st.sidebar.multiselect('Specification(s):', df[['COUNTRY', 'SITC 1 DIGIT', 'SITC 2 DIGIT', 'YEAR']].drop(['SITC 1 DIGIT', 'SITC 2 DIGIT'], axis = 1).columns,  key = '52')
@@ -365,7 +365,8 @@ def tree_map():
 
 
 def bubble_graph():
-    year = st.slider('YEAR:', 2013, 2019, 2018)
+    st.subheader("Bubble Plot of Malaysia's Trade Performance from 2013 to 2019")
+    year = st.sidebar.slider('YEAR:', 2013, 2019, 2018)
     rca = pd.read_csv('Malaysia_RCA_stats.csv')
     rca = rca.drop(['Reporter Name', 'Partner Name', 'Trade Flow'], axis=1)
     rca_melt = rca.melt(id_vars=['1D DESC'], value_vars=['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
@@ -382,6 +383,7 @@ def bubble_graph():
     st.plotly_chart(fig)
 
 def area_graph():
+    st.subheader("Area Plot of Malaysia's Trade Performance from 2013 to 2019")
     sitc = st.sidebar.selectbox('SITC:', ['SITC 1 DIGIT', 'SITC 2 DIGIT'])
     if sitc == 'SITC 1 DIGIT':
         df_sitc_1 = df.groupby(['SITC 1 DIGIT', 'YEAR'])[show].agg(['sum']).reset_index()
