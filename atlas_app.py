@@ -1,12 +1,6 @@
 import streamlit as st
 import base64
 
-my_expander = st.beta_expander()
-with my_expander:
-    'Hello there!'
-    clicked = st.button('Click me!')
-
-
 def st_pdf_display(pdf_file):
 	with open(pdf_file,"rb") as f:
 		base64_pdf = base64.b64encode(f.read()).decode('utf-8')
