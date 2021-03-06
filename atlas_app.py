@@ -1,10 +1,16 @@
 import streamlit as st
+import base64
 
 st.write(""" # Postage Calculator """)
 
+st.markdown("""
+<embed src="https://drive.google.com/viewerng/
+viewer?embedded=true&url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" width="400" height="400">
+""", unsafe_allow_html=True)
 
-sender = st.selectbox("From:",['West Malaysia','Sarawak', 'Sabah'])
-receiver = st.selectbox("To:",['West Malaysia','Sarawak', 'Sabah'])
+
+sender = st.selectbox("From:",['West Malaysia','East Malaysia'])
+receiver = st.selectbox("To:",['West Malaysia','East Malaysia'])
 weight = st.selectbox("Weight (kg):",['<0.5','<1.0','<1.5','<2.0','<2.5','<3.0'])
 
 st.write(""" # Courier """)
