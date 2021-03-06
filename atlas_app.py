@@ -1,20 +1,28 @@
 import streamlit as st
 import base64
 
-st.write(""" # Postage Calculator """)
-
-st.markdown("""
-<embed src="https://drive.google.com/viewerng/
-viewer?embedded=true&url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" width="400" height="400">
-""", unsafe_allow_html=True)
+my_expander = st.beta_expander()
+with my_expander:
+    'Hello there!'
+    clicked = st.button('Click me!')
 
 
-sender = st.selectbox("From:",['West Malaysia','East Malaysia'])
-receiver = st.selectbox("To:",['West Malaysia','East Malaysia'])
-weight = st.selectbox("Weight (kg):",['<0.5','<1.0','<1.5','<2.0','<2.5','<3.0'])
+def st_pdf_display(pdf_file):
+	with open(pdf_file,"rb") as f:
+		base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+	pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="700" type="application/pdf">' 
+	st.markdown(pdf_display, unsafe_allow_html=True)
 
-st.write(""" # Courier """)
-courier = st.selectbox("Choose courier service:", [
+st_pdf_display("Test.pdf")
+
+
+st.sidebar.write(""" # Postage Calculator """)
+sender = st.sidebar.selectbox("From:",['West Malaysia','East Malaysia'])
+receiver = st.sidebar.selectbox("To:",['West Malaysia','East Malaysia'])
+weight = st.sidebar.selectbox("Weight (kg):",['<0.5','<1.0','<1.5','<2.0','<2.5','<3.0'])
+
+st.sidebar.write(""" # Courier """)
+courier = st.sidebar.selectbox("Choose courier service:", [
      'DHL', 
     'J&T', 'Poslaju'
 ])
@@ -104,4 +112,4 @@ if courier == 'J&T':
 		elif weight == '<3.0':
 			rate = 13.0
 
-st.write("""### Rates: RM {}""".format(rate))
+st.sidebar.write("""### Rates: RM {}""".format(rate))
