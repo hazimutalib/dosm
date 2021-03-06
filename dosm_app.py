@@ -3,21 +3,66 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-sns.set()
+sns.set(style="darkgrid")
+plt.style.use('dark_background')
 import base64
 import plotly.express as px
 
+
+
+
+
 st.markdown(
     """
-<style>
-.sidebar .sidebar-content {
-    background-image: linear-gradient(#2e7bcf,#2e7bcf);
+	<style>
+	.sidebar .sidebar-content {
+    background-image: linear-gradient(#D8BFD8);
     color: white;
-}
+	}
 </style>
 """,
     unsafe_allow_html=True,
 )
+
+st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background-image: linear-gradient(#2F4F4F,#2F4F4F);
+   	 	color: black;
+    }
+ 	</style>
+""",
+    unsafe_allow_html=True,
+)
+
+
+st.markdown(""" 
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+  h1,h2,h3,h4,h5,h6 {font-family: "Oswald"}
+  </style>
+  """, unsafe_allow_html=True,)
+
+st.markdown("""
+<nav>
+<div class="w3-bar w3-white w3-hide-small">
+  <a href="https://www.facebook.com/" class="w3-bar-item w3-button"><i class="fa fa-facebook-official"></i></a>
+  <a href="https://www.instagram.com/" class="w3-bar-item w3-button"><i class="fa fa-instagram"></i></a>
+  <a href="https://www.snapchat.com/" class="w3-bar-item w3-button"><i class="fa fa-snapchat"></i></a>
+  <a href="https://www.flickr.com/" class="w3-bar-item w3-button"><i class="fa fa-flickr"></i></a>
+  <a href="https://www.twitter.com/" class="w3-bar-item w3-button"><i class="fa fa-twitter"></i></a>
+  <a href="https://www.linkedin.com/" class="w3-bar-item w3-button"><i class="fa fa-linkedin"></i></a>
+</div>
+</nav>
+
+	""", unsafe_allow_html = True,)
+  
+
+
 
 st.write(""" # Malaysia's Trade Performance Dashboard Application """)
 
@@ -388,7 +433,7 @@ def bi_graph_tree(feature, column, i):
             df_merge = df[df[column] == i].groupby([feature, 'SITC 1 DIGIT'])[show].sum().reset_index()
             df_merge = df_merge[df_merge[show] > 0]
             df_merge["COMMODITY"] = "COMMODITY"
-            fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data =[show], color_continuous_scale='RdBu', title=title)
+            fig = px.treemap(df_merge, path=['COMMODITY', 'SITC 1 DIGIT', feature], values=show, color=show, hover_data =[show], color_continuous_scale='RdBu', title=title, template = "plotly_dark")
             fig.update_layout(height=600, width=900)
             st.plotly_chart(fig)
         else:
